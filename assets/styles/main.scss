@@ -1,0 +1,31 @@
+// set theme colors
+$primary: #0667e7;
+$secondary: #4c5567;
+$dark: #212121;
+$theme1: #33a8d1;
+
+@import "node_modules/bootstrap/scss/_functions";
+@import "node_modules/bootstrap/scss/_variables";
+@import "node_modules/bootstrap/scss/_mixins";
+
+// add custom colors to the bootstrap theme
+$custom-theme-colors: (
+        "theme1": $theme1,
+        "white": $white
+);
+
+// fix for bootstrap 5.1 transposing colors
+$theme-colors: map-merge($theme-colors, $custom-theme-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
+// Overwrite bootstrap sass variables (check _variables for all options)
+$enable-negative-margins: true;
+$navbar-light-color: $dark;
+$font-family-base: 'Inter', sans-serif;
+$font-size-base: .85rem;
+$input-btn-padding-x: 1rem;
+$border-radius: 2px;
+$link-color: $theme1;
+
+// Finally load bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
