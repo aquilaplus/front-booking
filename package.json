@@ -16,11 +16,15 @@
     "bootstrap": "^5.3.2",
     "nuxt": "^3.10.1",
     "pinia": "^2.1.7",
+    "postmark": "^4.0.2",
     "sass": "^1.70.0",
     "sass-loader": "^14.1.0",
     "uuid": "^9.0.1",
     "v-calendar": "^3.1.2",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "h3": "^1.11.1"
   }
 }

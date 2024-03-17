@@ -1,6 +1,6 @@
 <template>
-    <div class="container" v-if="customerData" style="min-width: 100vw;min-height: 100vh">
-        <div class="row">
+    <div class="col-12 position-relative" v-if="customerData">
+        <div class="row ">
             <!-- Statut de la réservation -->
             <div class="col-12 d-flex justify-content-center align-items-center p-0">
                 <div class="banner w-100">
@@ -24,7 +24,7 @@
             <!-- Détails de la réservation -->
             <div class="col-12 mt-5 text-center animate__animated animate__fadeIn">
                 <div class="row">
-                    <div class="col-md-6 mx-auto" style="max-width: 400px">
+                    <div class="col-md-7 mx-auto" style="max-width: 400px">
                         <div class="card border-0">
                             <h6 class="fs-6 fw-bold">Informations de réservation</h6>
                             <ul class="list-group text-start">
@@ -78,6 +78,7 @@ await bookingStore.getBooking();
 const restaurantData = computed(() => bookingStore.restaurantData);
 const customerData = computed(() => bookingStore.customerData)
 const bookingStatus = computed(() => customerData.value.bookingStatus);
+
 const timeFormat = (time: Date) => {
     return new Date(time).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
 }
