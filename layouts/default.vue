@@ -1,5 +1,5 @@
 <template>
-    <div class="container d-flex justify-content-center" style="height:100vh">
+    <div class="container" style="max-width: 100vw; width: 600px">
         <div class="row" :data-bs-theme="bookingStore.mode">
             <slot/>
         </div>
@@ -35,11 +35,11 @@ const bookingStore = useBookingStore();
 }
 
 .vc-dark .vc-attr, .vc-light .vc-attr {
-    --vc-highlight-solid-bg: var(--custom-color);
+    --vc-highlight-solid-bg: #d0d0d0;
 }
 
 .vc-dark, .vc-light {
-    --vc-focus-ring: 0 0 0 2px var(--custom-color);
+    --vc-focus-ring: 0 0 0 2px #d2d2d2;
 }
 
 .vc-nav-item.is-active {

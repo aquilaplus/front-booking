@@ -22,7 +22,7 @@ onMounted(async () => {
 
 <style>
 :root {
-    --custom-color: #000;
+    --custom-color: #000000;
 }
 
 .page-enter-active,

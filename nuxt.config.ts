@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
     devtools: {enabled: false},
     modules: ['@pinia/nuxt', '@nuxt/image'],
-    css: ['~/assets/styles/main.scss'],
+    css: ['bootstrap/dist/css/bootstrap.min.css'],
     app: {
         pageTransition: {name: 'page', mode: 'out-in'},
         head: {

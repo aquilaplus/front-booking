@@ -12,8 +12,8 @@
                 <h1 class="position-absolute text-light" style="font-size: 3rem; margin-top: -30px;font-family: Verdana,sans-serif">{{ restaurantData.name }}</h1>
                 <div class="position-absolute d-flex bg-white border border-5 rounded-circle shadow"
                      :class="[`border-${bookingStatus.color}`]"
-                     style="margin-bottom: -190px; padding: 30px; width: 130px; height: 130px">
-                    <i class="fa-4x m-auto" :class="[bookingStatus.icon, `text-${bookingStatus.color}`]"></i>
+                     style="margin-bottom: -190px; width: 130px; height: 130px">
+                    <i class="fa-5x m-auto" :class="[bookingStatus.icon, `text-${bookingStatus.color}`]"></i>
                 </div>
             </div>
             <div class="col-12 mt-4 text-center">
@@ -45,7 +45,7 @@
             <!-- Détails de la réservation -->
 
             <!-- Annulation -->
-            <div class="col-12 position-absolute bottom-0 mb-4 mt-5 text-center" v-if="!['cancel_client', 'cancel_restaurant', 'no_show'].includes(bookingStatus.slug)">
+            <div class="col-12 mb-4 mt-5 text-center" v-if="!['cancel_client', 'cancel_restaurant', 'no_show'].includes(bookingStatus.slug)">
                 <button class="btn btn-danger btn-sm rounded-3" data-bs-toggle="modal" data-bs-target="#cancelModal">Annuler</button>
             </div>
 
@@ -80,7 +80,7 @@ const customerData = computed(() => bookingStore.customerData)
 const bookingStatus = computed(() => customerData.value.bookingStatus);
 
 const timeFormat = (time: Date) => {
-    return new Date(time).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
+    return new Date(time).getUTCHours().toString().padStart(2, '0') + ':' + new Date(time).getUTCMinutes().toString().padStart(2, '0');
 }
 const dateFormat = (date: Date) => {
     return new Date(date).toLocaleDateString('fr-FR', {month: 'numeric', day: 'numeric'});

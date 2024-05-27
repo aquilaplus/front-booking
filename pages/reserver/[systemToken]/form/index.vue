@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 m-auto" style="max-width: 100%; width: 600px">
+    <div class="col-12 m-auto" v-if="bookingStore.form.date">
         <div class="card p-3 border-0 overflow-hidden" style="transition: all 0.5s ease">
             <div class="row position-relative">
                 <h2 class="fs-6 fw-bold text-center">{{ bookingStore.restaurantData.name }}</h2>
@@ -11,11 +11,10 @@
                         <span class="fs-6 text-primary">Modifier</span>
                     </NuxtLink>
 
-
                     <div>
                         <i class="fas fa-fork-knife" style="font-size: 1rem"></i><span class="ms-1 fs-6">{{ bookingStore.form.customers }}</span>
                         <i class="far fa-calendar ms-3" style="font-size: 1rem"></i><span class="ms-2 fs-6">{{ bookingStore.form.date.toLocaleDateString('fr-FR', {month: 'numeric', day: 'numeric'}) }}</span>
-                        <i class="far fa-clock ms-3" style="font-size: 1rem"></i><span class="ms-2 fs-6">{{ bookingStore.form.time.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'}) }}</span>
+                        <i class="far fa-clock ms-3" style="font-size: 1rem"></i><span class="ms-2 fs-6">{{ bookingStore.form.time.getUTCHours().toString().padStart(2, '0') }}:{{ bookingStore.form.time.getMinutes().toString().padStart(2, '0') }}</span>
                     </div>
                 </div>
                 <!-- Résumé de la réservation -->
@@ -85,6 +84,10 @@ import {useBookingStore} from '~/stores';
 
 const bookingStore = useBookingStore();
 const route = useRoute();
+
+if (!bookingStore.form.date) {
+    navigateTo('/reserver/' + route.params.systemToken + '/');
+}
 
 function confirmBooking() {
     bookingStore.checkForm();

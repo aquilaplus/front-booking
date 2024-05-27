@@ -19,8 +19,48 @@ export const useBookingStore = defineStore("booking", {
             localisationLink: '',
             color: '',
             logoName: '',
-            needConfirm: false,
-            autoConfirm: false,
+            clientConfirm: false,
+            restaurantConfirm: false,
+            bookingSystemDays: [
+                {
+                    id: '',
+                    name: '',
+                    slug: '',
+                    isActive: false,
+                    bookingServices: [
+                        {
+                            id: '',
+                            name: '',
+                            bookingHours: [
+                                {
+                                    id: '',
+                                    hour: '',
+                                }
+                            ]
+                        }
+                    ],
+                }
+            ],
+            bookingSystemCustomDays: [
+                {
+                    id: '',
+                    name: '',
+                    date: new Date(),
+                    isActive: false,
+                    bookingServices: [
+                        {
+                            id: '',
+                            name: '',
+                            bookingHours: [
+                                {
+                                    id: '',
+                                    hour: '',
+                                }
+                            ]
+                        }
+                    ],
+                }
+            ]
         },
         customerData: {
             token: '',
@@ -36,7 +76,7 @@ export const useBookingStore = defineStore("booking", {
                 token: '',
             },
             bookingStatus: {
-                id: 1,
+                id: 0,
                 name: '',
                 slug: '',
                 icon: '',
@@ -51,17 +91,13 @@ export const useBookingStore = defineStore("booking", {
             email: '',
             comment: '',
             customers: ref(2),
-            date: ref(new Date()),
-            time: ref(new Date()),
+            date: null,
+            time: new Date() as Date | null,
             errors: [] as string[],
             nameDigifense: null,
             emailDigifense: null,
         },
         customers: ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
-        afternoonHours: [
-            '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00'],
-        eveningHours: [
-            '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30'],
     }),
 
     actions: {
@@ -74,6 +110,7 @@ export const useBookingStore = defineStore("booking", {
                 // @ts-ignore
                 this.restaurantData = dataFetch.data ? dataFetch.data : null;
                 this.loaded = true;
+                this.form.time = null;
             } catch (err) {
                 throw err;
             }
@@ -88,12 +125,21 @@ export const useBookingStore = defineStore("booking", {
 
                 // @ts-ignore
                 this.customerData = bookingFetch.data ? bookingFetch.data : null;
+                let status = 0;
 
                 if (this.customerData.bookingStatus.id == 1) {
-                    await $fetch(this.apiUrl + '/api/bookings/' + route.params.token, {
+                    if (this.restaurantData.clientConfirm && this.restaurantData.restaurantConfirm) {
+                        status = 2;
+                    } else if (this.restaurantData.clientConfirm && !this.restaurantData.restaurantConfirm) {
+                        status = 5;
+                    } else {
+                        status = 5;
+                    }
+
+                    await $fetch(this.apiUrl + '/api/bookings/' + route.params.token + '.json', {
                         method: 'PATCH',
                         body: JSON.stringify({
-                            bookingStatus: this.apiUrl + '/api/booking_statuses/' + 5,
+                            bookingStatus: this.apiUrl + '/api/booking_statuses/' + status,
                         }),
                         headers: {
                             'Content-type': 'application/merge-patch+json; charset=UTF-8',
@@ -114,7 +160,11 @@ export const useBookingStore = defineStore("booking", {
 
             if (!this.form.nameDigifense || !this.form.emailDigifense) {
                 if (this.checkForm()) {
-                    if (this.restaurantData.autoConfirm) {
+                    if (this.restaurantData.clientConfirm) {
+                        this.customerData.bookingStatus.id = 1;
+                    } else if (this.restaurantData.restaurantConfirm) {
+                        this.customerData.bookingStatus.id = 2;
+                    } else {
                         this.customerData.bookingStatus.id = 5;
                     }
                     try {
@@ -128,7 +178,7 @@ export const useBookingStore = defineStore("booking", {
                                 email: this.form.email,
                                 customers: this.form.customers,
                                 comment: this.form.comment,
-                                date: this.form.date,
+                                date: new Date(this.form.date),
                                 time: this.form.time,
                                 bookingStatus: this.apiUrl + '/api/booking_statuses/' + this.customerData.bookingStatus.id,
                                 bookingSystem: this.apiUrl + '/api/booking_systems/' + route.params.systemToken,
